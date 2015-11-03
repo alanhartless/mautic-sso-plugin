@@ -9,13 +9,13 @@
 
 namespace MauticPlugin\MauticSSOBundle\Integration;
 
-use Mautic\PluginBundle\Integration\AbstractSsoIntegration;
+use Mautic\PluginBundle\Integration\AbstractSsoServiceIntegration;
 use Mautic\UserBundle\Entity\User;
 
 /**
  * Class GoogleAuthIntegration
  */
-class GoogleAuthIntegration extends AbstractSsoIntegration
+class GoogleAuthIntegration extends AbstractSsoServiceIntegration
 {
     /**
      * @return string
@@ -66,7 +66,7 @@ class GoogleAuthIntegration extends AbstractSsoIntegration
     }
 
     /**
-     * @param Response $response
+     * @param mixed $response
      *
      * @return mixed
      */
