@@ -10,8 +10,8 @@
 return array(
     'name'        => 'SSO Providers',
     'description' => 'SSO into Mautic using 3rd party services',
-    'version'     => '1.0',
-    'author'      => 'Mautic',
+    'version'     => '1.1',
+    'author'      => 'Alan Hartless',
 
     'services'    => array(
         'events' => array(
@@ -20,7 +20,7 @@ return array(
                 'arguments' => array(
                     'security.password_encoder',
                     'doctrine.orm.entity_manager',
-                    'mautic.factory'
+                    'mautic.helper.core_parameters'
                 )
             )
         )

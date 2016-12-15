@@ -11,7 +11,9 @@ namespace MauticPlugin\MauticSSOBundle\EventListener;
 
 use Doctrine\ORM\EntityManager;
 use Mautic\CoreBundle\Factory\MauticFactory;
+use Mautic\CoreBundle\Helper\CoreParametersHelper;
 use Mautic\PluginBundle\Integration\AbstractSsoIntegration;
+use Mautic\PluginBundle\Integration\AbstractSsoServiceIntegration;
 use Mautic\UserBundle\Entity\User;
 use Mautic\UserBundle\Event\AuthenticationEvent;
 use Mautic\UserBundle\UserEvents;
@@ -26,9 +28,9 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class UserSubscriber implements EventSubscriberInterface
 {
     /**
-     * @var MauticFactory
+     * @var CoreParametersHelper
      */
-    private $factory;
+    private $parametersHelper;
 
     /**
      * @var UserPasswordEncoderInterface
@@ -45,11 +47,11 @@ class UserSubscriber implements EventSubscriberInterface
         'GoogleAuth'
     );
 
-    public function __construct(UserPasswordEncoderInterface $encoder, EntityManager $em,  MauticFactory $factory)
+    public function __construct(UserPasswordEncoderInterface $encoder, EntityManager $em, CoreParametersHelper $parametersHelper)
     {
-        $this->em      = $em;
-        $this->factory = $factory;
-        $this->encoder = $encoder;
+        $this->em               = $em;
+        $this->parametersHelper = $parametersHelper;
+        $this->encoder          = $encoder;
     }
 
     /**
@@ -78,7 +80,7 @@ class UserSubscriber implements EventSubscriberInterface
         $user = new User();
         $user->setUsername($username);
 
-        $authorizedUsers = $this->factory->getParameter('authorized_users');
+        $authorizedUsers = $this->parametersHelper->getParameter('authorized_users');
 
         if (is_array($authorizedUsers) && isset($authorizedUsers[$username])
     ) {
@@ -116,12 +118,12 @@ class UserSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param AbstractSsoIntegration $integration
-     * @param                        $loginCheck
+     * @param AbstractSsoServiceIntegration $integration
+     * @param                               $loginCheck
      *
      * @return bool|RedirectResponse
      */
-    private function authenticateService(AbstractSsoIntegration $integration, $loginCheck)
+    private function authenticateService(AbstractSsoServiceIntegration $integration, $loginCheck)
     {
         if ($loginCheck) {
             if ($authenticatedUser = $integration->ssoAuthCallback()) {
